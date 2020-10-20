@@ -333,12 +333,27 @@ Get "druid" database name
 {{- end -}}
 
 {{/*
+Get "analytics" database name
+*/}}
+{{- define "analytics-db-name" -}}
+    {{ if .Values.user.legacyDatabaseNames }}
+        {{- print "analytics" }}
+    {{- else }}
+        {{- $f:= .Values.user.kubeNamespace -}}
+        {{ if empty $f }}
+            {{- fail "Please define kubeNamespace in values.yaml" }}
+        {{- else }}
+            {{- printf "%s_%s" $f "analytics" | replace "-" "_" -}}
+        {{- end }}
+    {{- end }}
+{{- end -}}
+
+{{/*
 Portal Docops page
 */}}
 {{- define "portal.help.page" -}}
-{{- printf "%s" "https://docops.ca.com/ca-api-developer-portal-enhanced-experience/4-3/en/" -}}
+{{- printf "%s" "https://techdocs.broadcom.com/content/broadcom/techdocs/us/en/ca-enterprise-software/layer7-api-management/api-developer-portal/4-5.html" -}}
 {{- end -}}
-
 
 {{/*
 Generate a unique "default-tenant-id" appended with the kubeNamespace to enable multiple deployments on
